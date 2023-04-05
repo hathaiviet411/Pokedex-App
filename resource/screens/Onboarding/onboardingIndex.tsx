@@ -17,6 +17,7 @@ SplashScreen.preventAutoHideAsync();
 const fetchFonts = () =>
   Font.loadAsync({
     'Cookie-Regular': require('../../../assets/fonts/Cookie-Regular.ttf'),
+    'Poppins-Regular': require('../../../assets/fonts/Poppins-Regular.ttf'),
   });
 
 export default function OnboardingOne(props: propsType) {
@@ -29,13 +30,13 @@ export default function OnboardingOne(props: propsType) {
     Animated.sequence([
       Animated.timing(loadingValue, {
         toValue: 1,
-        duration: 7000,
+        duration: 5000,
         easing: Easing.linear,
         useNativeDriver: true
       }),
     ]).start(() => {
       setIsShowLoadingAnimation(false);
-      props.navigation.push('OnboardingTwo');
+      props.navigation.push('OnboardingMain');
     });
   }
 
