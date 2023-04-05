@@ -15,14 +15,15 @@ export default function onboardingItem(props: propsType) {
       {
         item ? (
           <View>
-            <Text>{item['id']}</Text>
             <Image
               testID="avatar"
-              style={{ width: 50, height: 50 }}
-              source={{
-                uri: 'https://reactnative.dev/img/tiny_logo.png',
-              }}
+              style={{ width: 342, height: 265 }}
+              source={{ uri: item['image'] }}
             />
+
+            <Text>{item['title']}</Text>
+
+            <Text>{item['content']}</Text>
           </View>
         ) : (
           <Text></Text>
