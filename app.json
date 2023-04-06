@@ -20,14 +20,16 @@
         "image": "./assets/splash.png",
         "resizeMode": "contain",
         "backgroundColor": "#000029"
-      }
+      },
+      "bundleIdentifier": "com.evolynx.pokedex"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "resizeMode": "contain",
         "backgroundColor": "#000029"
-      }
+      },
+      "package": "com.evolynx.pokedex"
     },
     "web": {
       "favicon": "./assets/favicon.png"
