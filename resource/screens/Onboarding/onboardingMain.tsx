@@ -2,23 +2,44 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 import React from "react";
-import Lottie from 'lottie-react-native';
-
 import slides from "./slides";
+import Paginatior from './paginatior';
+import OnboardingItem from './onboardingItem';
 
-import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, Animated, StyleSheet, FlatList, SafeAreaView, Button, Easing, Image } from "react-native";
+import {
+  View,
+  FlatList,
+  Animated,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
-const fetchFonts = () =>
+const fetchFonts = () => {
   Font.loadAsync({
     'Cookie-Regular': require('../../../assets/fonts/Cookie-Regular.ttf'),
   });
+}
 
-export default function OnboardingTwo() {
+export default function OnboardingMain() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const slidesRef = useRef(null);
+
+  const viewableItemsChanged = useRef(({ viewableItems }) => {
+    setCurrentIndex(viewableItems[0].index);
+  }).current;
+
+  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+
+  const handleChangeCurrentPage = (currentPage) => {
+    console.log(currentPage);
+
+    slidesRef.current.scrollToIndex({ index: currentPage });
+  };
 
   useEffect(() => {
     async function prepare() {
@@ -48,29 +69,26 @@ export default function OnboardingTwo() {
   return (
     <SafeAreaView style={styles.container} onLayout={onLayoutRootView} >
       <View style={styles.mainContent}>
-        <Text style={styles.text}>Evolynx's Pokédex</Text>
-
-        <View style={[styles.justifyAlignCenter, styles.contentHolder]}>
-          <Image
-            testID="avatar"
-            style={{ width: 342, height: 265 }}
-            source={{ uri: slides[0]['image'] }}
-          />
-
-          <Text style={styles.title}>{slides[0]['title']}</Text>
-
-          <Text style={styles.content}>{slides[0]['content']}</Text>
-        </View>
-
-        <View style={styles.pagination}>
-          {slides.map((item, index) => {
-            return (
-              <View style={[styles.dot, { width: 20 }]} key={index.toString()}>
-
-              </View>
-            )
+        <FlatList
+          horizontal
+          data={slides}
+          pagingEnabled
+          bounces={false}
+          showsHorizontalScrollIndicator={false}
+          viewabilityConfig={viewConfig}
+          onViewableItemsChanged={viewableItemsChanged}
+          keyExtractor={(item) => item['id'].toString()}
+          scrollEventThrottle={1}
+          renderItem={({ item }) => <OnboardingItem item={item} onChangeCurrentPage={handleChangeCurrentPage} />}
+          ref={slidesRef}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false
           })}
-        </View>
+        />
+      </View>
+
+      <View style={{ flex: 1, position: 'absolute', bottom: 0 }}>
+        <Paginatior data={slides} scrollX={scrollX} />
       </View>
     </SafeAreaView >
   )
@@ -85,9 +103,7 @@ const styles = StyleSheet.create({
   },
 
   mainContent: {
-    flex: 1,
-    width: '100%',
-    paddingTop: 100,
+    flex: 3,
     alignItems: 'center',
   },
 
