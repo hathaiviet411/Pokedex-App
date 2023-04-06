@@ -9,16 +9,15 @@ export interface props {
   navigation: any,
 };
 
-export default function AlphaRegister(props) {
-  const [email, setEmail] = useState('');
+export default function CharlieRegister(props) {
+  const [name, setName] = useState('');
 
-  const handleEmailChange = (value) => {
-    console.log(email);
-    setEmail(value);
+  const handleChangeName = (value) => {
+    setName(value);
   };
 
-  const navigateToBetaRegister = () => {
-    props.navigation.navigate('BetaRegister');
+  const handleCreateAccount = () => {
+    props.navigation.navigate('Loading', { nextScreen: 'SuccessRegister' });
   };
 
   return (
@@ -28,26 +27,26 @@ export default function AlphaRegister(props) {
       </View>
 
       <View style={{ flex: 8, width: '100%' }}>
-        <Text style={styles.title}>Let's start!</Text>
-        <Text style={styles.subTitle}>What is your email?</Text>
+        <Text style={styles.title}>You almost there!</Text>
+        <Text style={styles.subTitle}>What is your name?</Text>
 
         <TextInput
           style={styles.input}
-          onChangeText={handleEmailChange}
-          value={email}
-          placeholder="Email"
+          onChangeText={handleChangeName}
+          value={name}
+          placeholder="Name"
           placeholderTextColor={'#999999'}
         />
 
         <Text style={styles.inputDescription}>
-          *Please use a valid email address.
+          *This will be your in-app username.
         </Text>
       </View>
 
       <View style={{ flex: 2, width: '100%' }}>
         {
-          email.length > 0 ? (
-            <TouchableOpacity style={styles.buttonActive} onPress={() => { navigateToBetaRegister() }}>
+          name.length > 0 ? (
+            <TouchableOpacity style={styles.buttonActive} onPress={() => { handleCreateAccount() }}>
               <Text style={styles.buttonTextActive}>Continue</Text>
             </TouchableOpacity>
           ) : (

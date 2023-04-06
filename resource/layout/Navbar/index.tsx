@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 
 export default function Navbar({ screenName, navigation }) {
   const handleBackAction = () => {
@@ -28,12 +28,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
   },
 
   backButton: {
     left: 20,
     position: 'absolute',
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
   },
 
   title: {

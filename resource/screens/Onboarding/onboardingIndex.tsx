@@ -6,7 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect, useRef } from "react";
 import { useIsFocused } from '@react-navigation/native';
-import { View, Animated, StyleSheet, SafeAreaView, Easing } from "react-native";
+import { Animated, StyleSheet, SafeAreaView, Easing, Platform } from "react-native";
 export interface propsType {
   navigation: any;
   route: any;
@@ -92,7 +92,7 @@ export default function OnboardingOne(props: propsType) {
             {
               translateY: bounceAnim.interpolate({
                 inputRange: [0, 1],
-                outputRange: [2000, 240],
+                outputRange: [2000, Platform.OS === 'ios' ? 260 : 240],
               }),
             },
           ],
