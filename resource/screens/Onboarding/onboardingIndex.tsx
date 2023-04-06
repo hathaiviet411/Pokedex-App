@@ -1,11 +1,12 @@
 import React from "react";
 import Lottie from 'lottie-react-native';
+
 import * as SplashScreen from 'expo-splash-screen';
 
 import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, Animated, StyleSheet, FlatList, SafeAreaView, Button, Easing } from "react-native";
-
+import { useState, useEffect, useRef } from "react";
+import { useIsFocused } from '@react-navigation/native';
+import { View, Animated, StyleSheet, SafeAreaView, Easing } from "react-native";
 export interface propsType {
   navigation: any;
   route: any;
@@ -17,11 +18,7 @@ export default function OnboardingOne(props: propsType) {
   const loadingValue = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const bounceAnim = useRef(new Animated.Value(0)).current;
-
-  const [isShowLoadingAnimation, setIsShowLoadingAnimation] = useState(true);
-
-  const startAnimation = () => {
-  };
+  const isFocused = useIsFocused();
 
   const InitialAnimationSequence = () => {
     Animated.parallel([
@@ -65,51 +62,27 @@ export default function OnboardingOne(props: propsType) {
       ])
     ]).start(() => {
       props.navigation.push('OnboardingMain');
-      setIsShowLoadingAnimation(false);
     });
   }
 
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    async function prepare() {
-      try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setAppIsReady(true);
-      }
-    }
+    SplashScreen.hideAsync();
 
-    prepare();
-  }, [fadeAnim]);
-
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
-      await SplashScreen.hideAsync();
+    if (isFocused) {
       InitialAnimationSequence();
     }
-  }, [appIsReady]);
-
-  if (!appIsReady) {
-    return null;
-  }
+  }, [isFocused]);
 
   return (
-    <SafeAreaView style={styles.container} onLayout={onLayoutRootView} >
+    <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
 
-      {
-        isShowLoadingAnimation ? (
-          <Lottie
-            source={require('../../../public/lottifiles-json/onboarding-loading.json')}
-            progress={loadingValue}
-          />
-        ) : (
-          <View />
-        )
-      }
+      <Lottie
+        source={require('../../../public/lottifiles-json/onboarding-loading.json')}
+        progress={loadingValue}
+      />
 
       <Animated.Text style={[styles.text, { opacity: fadeAnim }]}>"Hello, sunshine!"</Animated.Text>
 

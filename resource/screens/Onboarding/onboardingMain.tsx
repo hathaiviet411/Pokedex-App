@@ -1,6 +1,3 @@
-import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-
 import React from "react";
 import slides from "./slides";
 import Paginatior from './paginatior';
@@ -14,14 +11,6 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
-
-SplashScreen.preventAutoHideAsync();
-
-const fetchFonts = () => {
-  Font.loadAsync({
-    'Cookie-Regular': require('../../../assets/fonts/Cookie-Regular.ttf'),
-  });
-}
 
 export interface props {
   route: any
@@ -46,33 +35,8 @@ export default function OnboardingMain(props) {
     slidesRef.current.scrollToIndex({ index: currentPage });
   };
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await fetchFonts();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setAppIsReady(true);
-      }
-    }
-
-    prepare();
-  }, []);
-
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
-
-  if (!appIsReady) {
-    return null;
-  }
-
   return (
-    <SafeAreaView style={styles.container} onLayout={onLayoutRootView} >
+    <SafeAreaView style={styles.container}>
       <View style={styles.mainContent}>
         <FlatList
           horizontal
@@ -152,7 +116,7 @@ const styles = StyleSheet.create({
 
   dot: {
     height: 20,
-    borderRadius: 45 / 2,
+    borderRadius: 50,
     backgroundColor: '#493d8a',
     marginHorizontal: 5,
   }
