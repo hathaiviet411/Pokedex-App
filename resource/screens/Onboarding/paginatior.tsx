@@ -5,10 +5,6 @@ import { StyleSheet, Text, View, Animated, useWindowDimensions } from 'react-nat
 export default function paginatior({ data, scrollX }) {
   const { width } = useWindowDimensions();
 
-  useEffect(() => {
-    console.log(scrollX);
-  }, [scrollX])
-
   return (
     <View style={styles.container}>
       {data.map((_, i) => {

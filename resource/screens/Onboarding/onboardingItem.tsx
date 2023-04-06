@@ -8,31 +8,39 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
+import { Platform } from 'expo-modules-core';
+
 import { AntDesign } from '@expo/vector-icons';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function onboardingItem({ item, onChangeCurrentPage }) {
+export default function onboardingItem({ item, onChangeCurrentPage, navigation }) {
   const { width } = useWindowDimensions();
 
   const handleButtonClick = (buttonType, page) => {
     if (buttonType === 0) {
       onChangeCurrentPage(page);
+    } else {
+      navigateToRegister();
     }
   };
+
+  const navigateToRegister = () => {
+    navigation.navigate('Register');
+  }
 
   return (
     <View style={[styles.container, { width }]}>
       <View style={{ flex: 1, justifyContent: 'center' }}>
         {
           item['buttonType'] === 1 ? (
-            <View style={{ position: 'absolute', top: 0, right: 0 }}>
+            <View style={{ position: 'absolute', top: 10, right: 0 }}>
               <TouchableOpacity
                 style={styles.buttonLater}
                 onPress={() => { }}
               >
-                <Text style={styles.buttonLaterText}>Later</Text>
-                <AntDesign name="arrowright" size={18} color="black" style={{ lineHeight: 18, marginLeft: 10 }} />
+                <Text style={styles.buttonLaterText}>Skip</Text>
+                <AntDesign name="arrowright" size={18} color="#173EA5" style={{ lineHeight: 18, marginLeft: 10 }} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -79,6 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'ios' ? 40 : 30,
   },
 
   image: {
@@ -126,13 +135,14 @@ const styles = StyleSheet.create({
     borderRadius: 45 / 2,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center',
     backgroundColor: '#fff',
+    justifyContent: 'center',
   },
 
   buttonLaterText: {
     fontSize: 18,
-    color: '#000',
+    color: '#173EA5',
+    fontWeight: '700',
   },
 
   alreadyHaveAccount: {

@@ -1,5 +1,4 @@
 import React from "react";
-import * as Font from 'expo-font';
 import Lottie from 'lottie-react-native';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -14,29 +13,59 @@ export interface propsType {
 
 SplashScreen.preventAutoHideAsync();
 
-const fetchFonts = () =>
-  Font.loadAsync({
-    'Cookie-Regular': require('../../../assets/fonts/Cookie-Regular.ttf'),
-    'Poppins-Regular': require('../../../assets/fonts/Poppins-Regular.ttf'),
-  });
-
 export default function OnboardingOne(props: propsType) {
   const loadingValue = useRef(new Animated.Value(0)).current;
-  const bounceValueFirst = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const bounceAnim = useRef(new Animated.Value(0)).current;
 
   const [isShowLoadingAnimation, setIsShowLoadingAnimation] = useState(true);
 
+  const startAnimation = () => {
+  };
+
   const InitialAnimationSequence = () => {
-    Animated.sequence([
-      Animated.timing(loadingValue, {
-        toValue: 1,
-        duration: 5000,
-        easing: Easing.linear,
-        useNativeDriver: true
-      }),
+    Animated.parallel([
+      Animated.sequence([
+        Animated.timing(loadingValue, {
+          toValue: 1,
+          duration: 6000,
+          easing: Easing.linear,
+          useNativeDriver: true
+        }),
+      ]),
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 0.3,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 0.6,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        })
+      ]),
+      Animated.sequence([
+        Animated.delay(3000),
+        Animated.spring(bounceAnim, {
+          toValue: 0,
+          friction: 3,
+          useNativeDriver: true,
+        }),
+        Animated.spring(bounceAnim, {
+          toValue: 1,
+          friction: 10,
+          useNativeDriver: true,
+        })
+      ])
     ]).start(() => {
-      setIsShowLoadingAnimation(false);
       props.navigation.push('OnboardingMain');
+      setIsShowLoadingAnimation(false);
     });
   }
 
@@ -45,7 +74,6 @@ export default function OnboardingOne(props: propsType) {
   useEffect(() => {
     async function prepare() {
       try {
-        await fetchFonts();
         await new Promise(resolve => setTimeout(resolve, 1000));
       } catch (e) {
         console.warn(e);
@@ -55,7 +83,7 @@ export default function OnboardingOne(props: propsType) {
     }
 
     prepare();
-  }, []);
+  }, [fadeAnim]);
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -83,11 +111,23 @@ export default function OnboardingOne(props: propsType) {
         )
       }
 
-      <Animated.Text style={{
-        marginBottom: 200,
-        transform: [{ translateX: bounceValueFirst }],
-      }}>
-        <Text style={styles.text}>Please wait...</Text>
+      <Animated.Text style={[styles.text, { opacity: fadeAnim }]}>"Hello, sunshine!"</Animated.Text>
+
+      <Animated.Text
+        style={[styles.bounceText, {
+          transform: [
+            {
+              translateY: bounceAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [2000, 240],
+              }),
+            },
+          ],
+
+          marginTop: 30,
+        }]}
+      >
+        "Nice to meet you!"
       </Animated.Text>
     </SafeAreaView >
   )
@@ -102,7 +142,18 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 40,
-    fontFamily: "Cookie-Regular",
+    bottom: 200,
+    fontSize: 22,
+    color: '#493d8a',
+    fontWeight: '700',
+    textAlign: 'center',
+    position: 'absolute',
+  },
+
+  bounceText: {
+    fontSize: 22,
+    color: '#493d8a',
+    fontWeight: '700',
+    textAlign: 'center',
   }
 });

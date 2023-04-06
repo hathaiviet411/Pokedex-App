@@ -23,7 +23,12 @@ const fetchFonts = () => {
   });
 }
 
-export default function OnboardingMain() {
+export interface props {
+  route: any
+  navigation: any,
+}
+
+export default function OnboardingMain(props) {
   const [appIsReady, setAppIsReady] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -78,8 +83,8 @@ export default function OnboardingMain() {
           viewabilityConfig={viewConfig}
           onViewableItemsChanged={viewableItemsChanged}
           keyExtractor={(item) => item['id'].toString()}
-          scrollEventThrottle={1}
-          renderItem={({ item }) => <OnboardingItem item={item} onChangeCurrentPage={handleChangeCurrentPage} />}
+          scrollEventThrottle={32}
+          renderItem={({ item }) => <OnboardingItem item={item} onChangeCurrentPage={handleChangeCurrentPage} navigation={props['navigation']} />}
           ref={slidesRef}
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
             useNativeDriver: false
