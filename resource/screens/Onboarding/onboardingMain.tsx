@@ -2,24 +2,49 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 import React from "react";
-import Lottie from 'lottie-react-native';
-
 import slides from "./slides";
-import OnboardingItem from "./onboardingItem";
+import Paginatior from './paginatior';
+import OnboardingItem from './onboardingItem';
 
-import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, Animated, StyleSheet, FlatList, SafeAreaView, Button, Easing } from "react-native";
+import {
+  View,
+  FlatList,
+  Animated,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
-const fetchFonts = () =>
+const fetchFonts = () => {
   Font.loadAsync({
     'Cookie-Regular': require('../../../assets/fonts/Cookie-Regular.ttf'),
   });
+}
 
-export default function OnboardingTwo() {
+export interface props {
+  route: any
+  navigation: any,
+}
+
+export default function OnboardingMain(props) {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const slidesRef = useRef(null);
+
+  const viewableItemsChanged = useRef(({ viewableItems }) => {
+    setCurrentIndex(viewableItems[0].index);
+  }).current;
+
+  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+
+  const handleChangeCurrentPage = (currentPage) => {
+    console.log(currentPage);
+
+    slidesRef.current.scrollToIndex({ index: currentPage });
+  };
 
   useEffect(() => {
     async function prepare() {
@@ -46,18 +71,29 @@ export default function OnboardingTwo() {
     return null;
   }
 
-  const renderItem = ({ item }) => {
-    return (
-      <OnboardingItem item={item} />
-    )
-  };
-
   return (
     <SafeAreaView style={styles.container} onLayout={onLayoutRootView} >
       <View style={styles.mainContent}>
-        <Text style={styles.text}>Evolynx's Pokédex</Text>
+        <FlatList
+          horizontal
+          data={slides}
+          pagingEnabled
+          bounces={false}
+          showsHorizontalScrollIndicator={false}
+          viewabilityConfig={viewConfig}
+          onViewableItemsChanged={viewableItemsChanged}
+          keyExtractor={(item) => item['id'].toString()}
+          scrollEventThrottle={32}
+          renderItem={({ item }) => <OnboardingItem item={item} onChangeCurrentPage={handleChangeCurrentPage} navigation={props['navigation']} />}
+          ref={slidesRef}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false
+          })}
+        />
+      </View>
 
-        <FlatList data={slides} renderItem={renderItem} style={styles.flatList} />
+      <View style={{ flex: 1, position: 'absolute', bottom: 0 }}>
+        <Paginatior data={slides} scrollX={scrollX} />
       </View>
     </SafeAreaView >
   )
@@ -72,9 +108,8 @@ const styles = StyleSheet.create({
   },
 
   mainContent: {
-    flex: 1,
-    width: '100%',
-    paddingTop: 100,
+    flex: 3,
+    alignItems: 'center',
   },
 
   text: {
@@ -83,13 +118,42 @@ const styles = StyleSheet.create({
     fontFamily: "Cookie-Regular",
   },
 
-  flatList: {
-    marginTop: 50,
+  title: {
+    fontSize: 24,
+    marginTop: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontFamily: "Poppins-Regular",
   },
 
-  flexJustifyAlignCenter: {
-    flex: 1,
+  content: {
+    fontSize: 18,
+    marginTop: 50,
+    color: '#666666',
+    textAlign: 'center',
+    fontFamily: "Poppins-Regular",
+  },
+
+  contentHolder: {
+    marginTop: 80,
+  },
+
+  justifyAlignCenter: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  pagination: {
+    height: 64,
+    bottom: 50,
+    position: 'absolute',
+    flexDirection: 'row',
+  },
+
+  dot: {
+    height: 20,
+    borderRadius: 45 / 2,
+    backgroundColor: '#493d8a',
+    marginHorizontal: 5,
   }
 });
