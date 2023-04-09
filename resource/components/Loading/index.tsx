@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import Lottie from 'lottie-react-native';
 
 import { useEffect } from "react";
-import { useIsFocused } from '@react-navigation/native';
 import { View, StyleSheet } from "react-native";
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Loading({ navigation, route }) {
   const isFocused = useIsFocused();
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

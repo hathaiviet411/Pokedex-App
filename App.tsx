@@ -6,6 +6,9 @@ import AlphaRegister from './resource/screens/Register/alpha';
 import BetaRegister from './resource/screens/Register/beta';
 import CharlieRegister from './resource/screens/Register/charlie';
 import Loading from './resource/components/Loading';
+import AlphaLogin from './resource/screens/Login/alpha';
+import ForgotPassword from './resource/screens/ForgotPassword';
+import AlphaForgotPassword from './resource/screens/ForgotPassword/alpha';
 import SuccessRegister from './resource/screens/Register/success';
 import OnboardingMain from './resource/screens/Onboarding/onboardingMain';
 import OnboardingIndex from './resource/screens/Onboarding/onboardingIndex';
@@ -23,6 +26,9 @@ const PokedexStack = () => {
       <Stack.Screen name="BetaRegister" component={BetaRegister} />
       <Stack.Screen name="CharlieRegister" component={CharlieRegister} />
       <Stack.Screen name="Loading" component={Loading} />
+      <Stack.Screen name="AlphaLogin" component={AlphaLogin} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="AlphaForgotPassword" component={AlphaForgotPassword} />
       <Stack.Screen name="SuccessRegister" component={SuccessRegister} />
       <Stack.Screen name="OnboardingMain" component={OnboardingMain} />
       <Stack.Screen name="OnboardingIndex" component={OnboardingIndex} />

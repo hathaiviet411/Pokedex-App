@@ -10,37 +10,60 @@ export interface props {
   navigation: any,
 };
 
-export default function BetaRegister(props) {
+export default function AlphaLogin(props) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [securityStatus, setSecurityStatus] = useState(true);
-
-  const handlePasswordChange = (value) => {
-    setPassword(value);
-  };
 
   const handleSecurityStatusChange = () => {
     setSecurityStatus(!securityStatus);
   };
 
-  const navigateToCharlieRegister = () => {
-    props.navigation.navigate('CharlieRegister');
+  const handleEmailChange = (value) => {
+    setEmail(value);
+  };
+
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+  };
+
+  const navigateToBetaRegister = () => {
+    props.navigation.navigate('BetaRegister');
+  };
+
+  const navigateToForgotPassword = () => {
+    props.navigation.navigate('ForgotPassword');
   };
 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, paddingTop: 50, width: '100%' }}>
-        <Navbar screenName={'REGISTER'} navigation={props['navigation']} />
+        <Navbar screenName={'LOGIN'} navigation={props['navigation']} />
       </View>
 
       <View style={{ flex: 8, width: '100%' }}>
-        <Text style={styles.title}>Now...</Text>
-        <Text style={styles.subTitle}>Create a password</Text>
+        <Text style={styles.title}>Welcome back!</Text>
+        <Text style={styles.subTitle}>Fill in the information</Text>
+
+        <Text style={styles.labelText}>Email</Text>
+
+        <TextInput
+          value={email}
+          autoCorrect={false}
+          placeholder="Email"
+          style={styles.input}
+          autoCapitalize="none"
+          onChangeText={handleEmailChange}
+          placeholderTextColor={'#999999'}
+        />
+
+        <Text style={styles.labelText}>Password</Text>
 
         <View style={{ flexDirection: 'row' }}>
           <TextInput
             value={password}
             autoCorrect={false}
-            style={styles.input}
+            style={styles.passwordInput}
             autoCapitalize="none"
             placeholder="Password"
             secureTextEntry={securityStatus}
@@ -55,20 +78,23 @@ export default function BetaRegister(props) {
           </View>
         </View>
 
-        <Text style={styles.inputDescription}>
-          *Your password must be at least 8 characters long.
-        </Text>
+        <TouchableOpacity
+          onPress={() => { navigateToForgotPassword() }}
+          style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text style={{ color: '#493d8a', fontWeight: '700', fontSize: 16 }}>Forgot your password?</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 2, width: '100%' }}>
         {
-          password.length > 0 ? (
-            <TouchableOpacity style={styles.buttonActive} onPress={() => { navigateToCharlieRegister() }}>
-              <Text style={styles.buttonTextActive}>Continue</Text>
+          email.length > 0 && password.length > 0 ? (
+            <TouchableOpacity style={styles.buttonActive} onPress={() => { navigateToBetaRegister() }}>
+              <Text style={styles.buttonTextActive}>Login</Text>
             </TouchableOpacity>
           ) : (
             <View style={styles.buttonInactive}>
-              <Text style={styles.buttonTextInactive}>Continue</Text>
+              <Text style={styles.buttonTextInactive}>Login</Text>
             </View>
           )
         }
@@ -100,7 +126,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  labelText: {
+    fontSize: 16,
+    marginTop: 20,
+    marginLeft: 20,
+    color: '#999999',
+    marginBottom: 10,
+  },
+
   input: {
+    height: 60,
+    fontSize: 18,
+    borderWidth: 1,
+    paddingLeft: 15,
+    borderRadius: 5,
+    marginHorizontal: 20,
+    borderColor: '#999999',
+  },
+
+  passwordInput: {
     height: 60,
     fontSize: 18,
     width: '80%',
@@ -113,19 +157,11 @@ const styles = StyleSheet.create({
     borderColor: '#999999',
   },
 
-  inputDescription: {
-    fontSize: 14,
-    marginTop: 5,
-    marginLeft: 20,
-    color: '#999999',
-    textAlign: 'left',
-  },
-
   buttonActive: {
     height: 60,
     marginTop: 40,
-    borderRadius: 50,
     alignItems: 'center',
+    borderRadius: 50,
     marginHorizontal: 20,
     justifyContent: 'center',
     backgroundColor: '#173EA5',
@@ -135,8 +171,8 @@ const styles = StyleSheet.create({
     height: 60,
     marginTop: 40,
     borderWidth: 1,
-    borderRadius: 50,
     alignItems: 'center',
+    borderRadius: 50,
     marginHorizontal: 20,
     borderColor: '#DBDCDD',
     justifyContent: 'center',

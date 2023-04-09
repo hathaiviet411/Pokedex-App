@@ -31,10 +31,12 @@ export default function CharlieRegister(props) {
         <Text style={styles.subTitle}>What is your name?</Text>
 
         <TextInput
-          style={styles.input}
-          onChangeText={handleChangeName}
           value={name}
           placeholder="Name"
+          autoCorrect={false}
+          style={styles.input}
+          autoCapitalize="none"
+          onChangeText={handleChangeName}
           placeholderTextColor={'#999999'}
         />
 

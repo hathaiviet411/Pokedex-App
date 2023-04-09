@@ -1,13 +1,22 @@
 import * as React from 'react';
 import Lottie from 'lottie-react-native';
 
+import { useState, useRef } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
 export interface props {
   navigation: any,
 }
 
 export default function SuccessRegister(props) {
+  const lottieRef = useRef(null);
+
+  const [isShowSuccessAni, setIsShowSuccessAni] = useState(true);
+
+  const handleChangeShowSuccessAni = () => {
+    lottieRef.current.reset();
+    setIsShowSuccessAni(false);
+  };
+
   const navigateToAlphaRegister = () => {
     props.navigation.navigate('AlphaRegister')
   };
@@ -17,11 +26,19 @@ export default function SuccessRegister(props) {
       <View style={{ flex: 1, paddingTop: 50, width: '100%' }} />
 
       <View style={{ flex: 9, width: '100%' }}>
-        <Lottie
-          source={require('../../../public/lottifiles-json/congrat.json')}
-          autoPlay
-          loop
-        />
+        {
+          isShowSuccessAni ? (
+            <Lottie
+              ref={lottieRef}
+              source={require('../../../public/lottifiles-json/congrat.json')}
+              autoPlay
+              loop={false}
+              onAnimationFinish={handleChangeShowSuccessAni}
+            />
+          ) : (
+            <View />
+          )
+        }
 
         <Image
           style={{ height: 300, resizeMode: 'contain' }}

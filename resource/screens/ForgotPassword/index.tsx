@@ -2,7 +2,6 @@ import React from 'react';
 
 import Navbar from '../../layout/Navbar/index';
 
-import { Entypo } from '@expo/vector-icons';
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
@@ -10,60 +9,47 @@ export interface props {
   navigation: any,
 };
 
-export default function BetaRegister(props) {
-  const [password, setPassword] = useState('');
-  const [securityStatus, setSecurityStatus] = useState(true);
+export default function ForgotPassword(props) {
+  const [email, setEmail] = useState('');
 
-  const handlePasswordChange = (value) => {
-    setPassword(value);
+  const handleEmailChange = (value) => {
+    console.log(email);
+    setEmail(value);
   };
 
-  const handleSecurityStatusChange = () => {
-    setSecurityStatus(!securityStatus);
-  };
-
-  const navigateToCharlieRegister = () => {
-    props.navigation.navigate('CharlieRegister');
+  const navigateToAlphaForgotPassword = () => {
+    props.navigation.navigate('AlphaForgotPassword');
   };
 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, paddingTop: 50, width: '100%' }}>
-        <Navbar screenName={'REGISTER'} navigation={props['navigation']} />
+        <Navbar screenName={'RECOVERY PASSWORD'} navigation={props['navigation']} />
       </View>
 
       <View style={{ flex: 8, width: '100%' }}>
-        <Text style={styles.title}>Now...</Text>
-        <Text style={styles.subTitle}>Create a password</Text>
+        <Text style={styles.title}>Let's recover!</Text>
+        <Text style={styles.subTitle}>What is your email?</Text>
 
-        <View style={{ flexDirection: 'row' }}>
-          <TextInput
-            value={password}
-            autoCorrect={false}
-            style={styles.input}
-            autoCapitalize="none"
-            placeholder="Password"
-            secureTextEntry={securityStatus}
-            placeholderTextColor={'#999999'}
-            onChangeText={handlePasswordChange}
-          />
-
-          <View style={styles.buttonSecurity}>
-            <TouchableOpacity onPress={() => { handleSecurityStatusChange() }}>
-              <Entypo name={securityStatus ? 'eye-with-line' : 'eye'} size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TextInput
+          value={email}
+          autoCorrect={false}
+          placeholder="Email"
+          style={styles.input}
+          autoCapitalize="none"
+          onChangeText={handleEmailChange}
+          placeholderTextColor={'#999999'}
+        />
 
         <Text style={styles.inputDescription}>
-          *Your password must be at least 8 characters long.
+          *We will send a verification code to your email.
         </Text>
       </View>
 
       <View style={{ flex: 2, width: '100%' }}>
         {
-          password.length > 0 ? (
-            <TouchableOpacity style={styles.buttonActive} onPress={() => { navigateToCharlieRegister() }}>
+          email.length > 0 ? (
+            <TouchableOpacity style={styles.buttonActive} onPress={() => { navigateToAlphaForgotPassword() }}>
               <Text style={styles.buttonTextActive}>Continue</Text>
             </TouchableOpacity>
           ) : (
@@ -103,13 +89,10 @@ const styles = StyleSheet.create({
   input: {
     height: 60,
     fontSize: 18,
-    width: '80%',
-    marginLeft: 20,
+    borderWidth: 1,
     paddingLeft: 15,
     borderRadius: 5,
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderBottomWidth: 1,
+    marginHorizontal: 20,
     borderColor: '#999999',
   },
 
@@ -124,8 +107,8 @@ const styles = StyleSheet.create({
   buttonActive: {
     height: 60,
     marginTop: 40,
-    borderRadius: 50,
     alignItems: 'center',
+    borderRadius: 50,
     marginHorizontal: 20,
     justifyContent: 'center',
     backgroundColor: '#173EA5',
@@ -135,8 +118,8 @@ const styles = StyleSheet.create({
     height: 60,
     marginTop: 40,
     borderWidth: 1,
-    borderRadius: 50,
     alignItems: 'center',
+    borderRadius: 50,
     marginHorizontal: 20,
     borderColor: '#DBDCDD',
     justifyContent: 'center',
@@ -153,21 +136,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#4D4D4D',
     fontWeight: '700',
-  },
-
-  buttonSecurity: {
-    width: 50,
-    height: 60,
-    marginLeft: -3,
-    borderTopWidth: 1,
-    borderRightWidth: 1,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#999999',
-    backgroundColor: '#fff',
-    borderTopRightRadius: 5,
-    justifyContent: 'center',
-    borderBottomRightRadius: 5,
   },
 });
 

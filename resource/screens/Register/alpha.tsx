@@ -13,7 +13,6 @@ export default function AlphaRegister(props) {
   const [email, setEmail] = useState('');
 
   const handleEmailChange = (value) => {
-    console.log(email);
     setEmail(value);
   };
 
@@ -32,10 +31,12 @@ export default function AlphaRegister(props) {
         <Text style={styles.subTitle}>What is your email?</Text>
 
         <TextInput
-          style={styles.input}
-          onChangeText={handleEmailChange}
           value={email}
+          autoCorrect={false}
           placeholder="Email"
+          style={styles.input}
+          autoCapitalize="none"
+          onChangeText={handleEmailChange}
           placeholderTextColor={'#999999'}
         />
 

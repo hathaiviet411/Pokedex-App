@@ -1,16 +1,10 @@
 import React from 'react';
 
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
 
 import { Platform } from 'expo-modules-core';
 import { AntDesign } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, View, Image, StyleSheet, useWindowDimensions, } from 'react-native';
 
 export default function onboardingItem({ item, onChangeCurrentPage, navigation }) {
   const { width } = useWindowDimensions();

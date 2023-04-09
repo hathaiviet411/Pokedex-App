@@ -8,6 +8,10 @@ export interface props {
 }
 
 export default function Login(props) {
+  const navigateToAlphaLogin = () => {
+    props.navigation.navigate('AlphaLogin');
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, paddingTop: 50, width: '100%' }}>
@@ -42,7 +46,7 @@ export default function Login(props) {
           <Text style={styles.buttonText}>Continue with Google</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.buttonEmail, { marginTop: 15 }]}>
+        <TouchableOpacity style={[styles.buttonEmail, { marginTop: 15 }]} onPress={() => { navigateToAlphaLogin() }}>
           <Text style={styles.buttonEmailText}>Continue with an email</Text>
         </TouchableOpacity>
       </View>
@@ -54,6 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#FFF',
     justifyContent: 'center',
   },
 
