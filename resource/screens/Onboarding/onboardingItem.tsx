@@ -1,18 +1,10 @@
 import React from 'react';
 
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
 
 import { Platform } from 'expo-modules-core';
-
 import { AntDesign } from '@expo/vector-icons';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, View, Image, StyleSheet, useWindowDimensions, } from 'react-native';
 
 export default function onboardingItem({ item, onChangeCurrentPage, navigation }) {
   const { width } = useWindowDimensions();
@@ -27,6 +19,10 @@ export default function onboardingItem({ item, onChangeCurrentPage, navigation }
 
   const navigateToRegister = () => {
     navigation.navigate('Register');
+  }
+
+  const navigateToLogin = () => {
+    navigation.navigate('Login');
   }
 
   return (
@@ -68,7 +64,7 @@ export default function onboardingItem({ item, onChangeCurrentPage, navigation }
           item['buttonType'] === 1 ? (
             <View style={styles.alreadyHaveAccount}>
               <TouchableOpacity
-                onPress={() => { }}
+                onPress={() => { navigateToLogin() }}
               >
                 <Text style={styles.alreadyHaveAccountText}>I already have an account</Text>
               </TouchableOpacity>
@@ -114,17 +110,17 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    height: 45,
+    height: 60,
     marginTop: 50,
-    borderRadius: 45 / 2,
+    borderRadius: 50,
     alignItems: 'center',
-    marginHorizontal: 80,
+    marginHorizontal: 20,
     justifyContent: 'center',
     backgroundColor: '#173EA5',
   },
 
   buttonText: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#FFF',
     fontWeight: '700',
   },
@@ -132,7 +128,7 @@ const styles = StyleSheet.create({
   buttonLater: {
     height: 45,
     width: 120,
-    borderRadius: 45 / 2,
+    borderRadius: 50,
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -140,7 +136,7 @@ const styles = StyleSheet.create({
   },
 
   buttonLaterText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#173EA5',
     fontWeight: '700',
   },

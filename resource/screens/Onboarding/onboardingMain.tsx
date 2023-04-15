@@ -1,27 +1,11 @@
-import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-
 import React from "react";
 import slides from "./slides";
 import Paginatior from './paginatior';
 import OnboardingItem from './onboardingItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import {
-  View,
-  FlatList,
-  Animated,
-  StyleSheet,
-  SafeAreaView,
-} from "react-native";
-
-SplashScreen.preventAutoHideAsync();
-
-const fetchFonts = () => {
-  Font.loadAsync({
-    'Cookie-Regular': require('../../../assets/fonts/Cookie-Regular.ttf'),
-  });
-}
+import { useState, useRef, useEffect } from "react";
+import { View, FlatList, Animated, StyleSheet, SafeAreaView } from "react-native";
 
 export interface props {
   route: any
@@ -29,8 +13,8 @@ export interface props {
 }
 
 export default function OnboardingMain(props) {
-  const [appIsReady, setAppIsReady] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef(null);
 
@@ -41,54 +25,39 @@ export default function OnboardingMain(props) {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   const handleChangeCurrentPage = (currentPage) => {
-    console.log(currentPage);
-
     slidesRef.current.scrollToIndex({ index: currentPage });
   };
 
   useEffect(() => {
-    async function prepare() {
-      try {
-        await fetchFonts();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setAppIsReady(true);
-      }
-    }
+    async function checkIfFirstLaunch() {
+      const hasOpenedAppBefore = await AsyncStorage.getItem('hasOpenedAppBefore');
 
-    prepare();
+      if (hasOpenedAppBefore === null) {
+        await AsyncStorage.setItem('hasOpenedAppBefore', 'true');
+      } else {
+        props.navigation.navigate('Login');
+      }
+    };
+
+    checkIfFirstLaunch();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
-
-  if (!appIsReady) {
-    return null;
-  }
-
   return (
-    <SafeAreaView style={styles.container} onLayout={onLayoutRootView} >
+    <SafeAreaView style={styles.container}>
       <View style={styles.mainContent}>
         <FlatList
           horizontal
           data={slides}
           pagingEnabled
           bounces={false}
-          showsHorizontalScrollIndicator={false}
+          ref={slidesRef}
+          scrollEventThrottle={32}
           viewabilityConfig={viewConfig}
+          showsHorizontalScrollIndicator={false}
           onViewableItemsChanged={viewableItemsChanged}
           keyExtractor={(item) => item['id'].toString()}
-          scrollEventThrottle={32}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
           renderItem={({ item }) => <OnboardingItem item={item} onChangeCurrentPage={handleChangeCurrentPage} navigation={props['navigation']} />}
-          ref={slidesRef}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-            useNativeDriver: false
-          })}
         />
       </View>
 
@@ -152,7 +121,7 @@ const styles = StyleSheet.create({
 
   dot: {
     height: 20,
-    borderRadius: 45 / 2,
+    borderRadius: 50,
     backgroundColor: '#493d8a',
     marginHorizontal: 5,
   }

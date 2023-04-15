@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { StyleSheet, Text, View, Animated, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Animated, useWindowDimensions } from 'react-native';
 
 export default function paginatior({ data, scrollX }) {
   const { width } = useWindowDimensions();
@@ -12,14 +12,14 @@ export default function paginatior({ data, scrollX }) {
 
         const dotWidth = scrollX.interpolate({
           inputRange,
-          outputRange: [15, 30, 15],
           extrapolate: 'clamp',
+          outputRange: [15, 30, 15],
         });
 
         const opacity = scrollX.interpolate({
           inputRange,
-          outputRange: [0.3, 1, 0.3],
           extrapolate: 'clamp',
+          outputRange: [0.3, 1, 0.3],
         });
 
         return (
