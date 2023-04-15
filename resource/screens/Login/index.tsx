@@ -12,6 +12,10 @@ export default function Login(props) {
     props.navigation.navigate('AlphaLogin');
   };
 
+  const navigateToSignUp = () => {
+    props.navigation.navigate('Register');
+  }
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, paddingTop: 50, width: '100%' }}>
@@ -49,6 +53,15 @@ export default function Login(props) {
         <TouchableOpacity style={[styles.buttonEmail, { marginTop: 15 }]} onPress={() => { navigateToAlphaLogin() }}>
           <Text style={styles.buttonEmailText}>Continue with an email</Text>
         </TouchableOpacity>
+
+        <View style={styles.alreadyHaveAccount}>
+
+          <TouchableOpacity
+            onPress={() => { navigateToSignUp() }}
+          >
+            <Text style={styles.alreadyHaveAccountText}>Fresh here ? Let's sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View >
   );
@@ -106,13 +119,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 36,
     justifyContent: 'center',
     backgroundColor: '#173EA5',
-
   },
 
   buttonEmailText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: '700',
-
   },
+
+  alreadyHaveAccount: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+
+  alreadyHaveAccountText: {
+    fontSize: 16,
+    color: '#173EA5',
+    fontWeight: '700',
+  }
 });

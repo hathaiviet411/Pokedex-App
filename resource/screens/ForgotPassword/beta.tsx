@@ -1,4 +1,5 @@
 import React from 'react';
+import Toast from 'react-native-toast-message';
 
 import Navbar from '../../layout/Navbar/index';
 
@@ -10,52 +11,51 @@ export interface props {
   navigation: any,
 };
 
-export default function AlphaLogin(props) {
-  const [email, setEmail] = useState('');
+export default function BetaForgotPassword(props) {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [securityStatus, setSecurityStatus] = useState(true);
+  const [securityConfirmStatus, setSecurityConfirmStatus] = useState(true);
 
   const handleSecurityStatusChange = () => {
     setSecurityStatus(!securityStatus);
   };
 
-  const handleEmailChange = (value) => {
-    setEmail(value);
+  const handleSecurityConfirmStatusChange = () => {
+    setSecurityConfirmStatus(!securityConfirmStatus);
   };
 
   const handlePasswordChange = (value) => {
     setPassword(value);
   };
 
-  const handleLogin = () => {
-    props.navigation.navigate('Loading', { nextScreen: 'SuccessLogin' });
+  const handleConfirmPasswordChange = (value) => {
+    setConfirmPassword(value);
   };
 
-  const navigateToForgotPassword = () => {
-    props.navigation.navigate('ForgotPassword');
+  const handleValidatePasswords = () => {
+    if (password !== confirmPassword) {
+      Toast.show({
+        type: 'pokeToastWarning',
+        props: {
+          title: 'Password not match',
+          content: 'Please check your passwords again!',
+        }
+      });
+    } else {
+      props.navigation.navigate('Loading', { nextScreen: 'SuccessForgotPassword' });
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, paddingTop: 50, width: '100%' }}>
-        <Navbar screenName={'LOGIN'} navigation={props['navigation']} />
+        <Navbar screenName={'RESET PASSWORD'} navigation={props['navigation']} />
       </View>
 
       <View style={{ flex: 8, width: '100%' }}>
-        <Text style={styles.title}>Welcome back!</Text>
-        <Text style={styles.subTitle}>Fill in the information</Text>
-
-        <Text style={styles.labelText}>Email</Text>
-
-        <TextInput
-          value={email}
-          autoCorrect={false}
-          placeholder="Email"
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={handleEmailChange}
-          placeholderTextColor={'#999999'}
-        />
+        <Text style={styles.title}>You're almost there!</Text>
+        <Text style={styles.subTitle}>Enter your new password</Text>
 
         <Text style={styles.labelText}>Password</Text>
 
@@ -78,23 +78,37 @@ export default function AlphaLogin(props) {
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={() => { navigateToForgotPassword() }}
-          style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Text style={{ color: '#493d8a', fontWeight: '700', fontSize: 16 }}>Forgot your password?</Text>
-        </TouchableOpacity>
+        <Text style={styles.labelText}>Confirm Password</Text>
+
+        <View style={{ flexDirection: 'row' }}>
+          <TextInput
+            value={confirmPassword}
+            autoCorrect={false}
+            style={styles.passwordInput}
+            autoCapitalize="none"
+            placeholder="Password"
+            secureTextEntry={securityConfirmStatus}
+            placeholderTextColor={'#999999'}
+            onChangeText={handleConfirmPasswordChange}
+          />
+
+          <View style={styles.buttonSecurity}>
+            <TouchableOpacity onPress={() => { handleSecurityConfirmStatusChange() }}>
+              <Entypo name={securityConfirmStatus ? 'eye-with-line' : 'eye'} size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
 
       <View style={{ flex: 2, width: '100%' }}>
         {
-          email.length > 0 && password.length > 0 ? (
-            <TouchableOpacity style={styles.buttonActive} onPress={() => { handleLogin() }}>
-              <Text style={styles.buttonTextActive}>Login</Text>
+          password.length > 0 && confirmPassword.length > 0 ? (
+            <TouchableOpacity style={styles.buttonActive} onPress={() => { handleValidatePasswords() }}>
+              <Text style={styles.buttonTextActive}>Submit</Text>
             </TouchableOpacity>
           ) : (
             <View style={styles.buttonInactive}>
-              <Text style={styles.buttonTextInactive}>Login</Text>
+              <Text style={styles.buttonTextInactive}>Submit</Text>
             </View>
           )
         }

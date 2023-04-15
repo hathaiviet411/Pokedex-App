@@ -11,6 +11,7 @@ export interface props {
 
 export default function AlphaForgotPassword(props) {
   const [timer, setTimer] = useState(60);
+  const [isReSend, setIsReSend] = useState(false);
 
   const firstDigitRef = useRef(null);
   const secondDigitRef = useRef(null);
@@ -27,6 +28,8 @@ export default function AlphaForgotPassword(props) {
   const [sixthDigit, setSixthDigit] = useState('');
 
   const handleFirstDigitChange = (value) => {
+    value = cleanInput(value);
+
     if (value) {
       setFirstDigit(value);
       secondDigitRef.current.focus();
@@ -36,6 +39,8 @@ export default function AlphaForgotPassword(props) {
   };
 
   const handleSecondDigitChange = (value) => {
+    value = cleanInput(value);
+
     if (value) {
       setSecondDigit(value);
       thirdDigitRef.current.focus();
@@ -46,6 +51,8 @@ export default function AlphaForgotPassword(props) {
   };
 
   const handleThirdDigitChange = (value) => {
+    value = cleanInput(value);
+
     if (value) {
       setThirdDigit(value);
       fourthDigitRef.current.focus();
@@ -56,6 +63,8 @@ export default function AlphaForgotPassword(props) {
   };
 
   const handleFourthDigitChange = (value) => {
+    value = cleanInput(value);
+
     if (value) {
       setFourthDigit(value);
       fifthDigitRef.current.focus();
@@ -66,6 +75,8 @@ export default function AlphaForgotPassword(props) {
   };
 
   const handleFifthDigitChange = (value) => {
+    value = cleanInput(value);
+
     if (value) {
       setFifthDigit(value);
       sixthDigitRef.current.focus();
@@ -76,12 +87,41 @@ export default function AlphaForgotPassword(props) {
   };
 
   const handleSixthDigitChange = (value) => {
+    value = cleanInput(value);
+
     if (value) {
       setSixthDigit(value);
     } else {
       setSixthDigit(value);
       fifthDigitRef.current.focus();
     }
+  };
+
+  const cleanInput = (string) => {
+    let result = '';
+
+    if (string) {
+      result = string.replace(/[^0-9]/g, '');
+    }
+
+    return result;
+  };
+
+  const handleChangeIsReSend = () => {
+    setTimer(60);
+    setIsReSend(false);
+    setFirstDigit('');
+    setSecondDigit('');
+    setThirdDigit('');
+    setFourthDigit('');
+    setFifthDigit('');
+    setSixthDigit('');
+
+    firstDigitRef.current.focus();
+  };
+
+  const handleToBetaForgorPassword = () => {
+    props.navigation.navigate('BetaForgotPassword');
   };
 
   const minutes = Math.floor(timer / 60);
@@ -93,7 +133,7 @@ export default function AlphaForgotPassword(props) {
     }, 1000);
 
     if (timer === 0) {
-      setTimer(60);
+      setIsReSend(true);
     }
 
     return () => clearInterval(interval);
@@ -109,8 +149,17 @@ export default function AlphaForgotPassword(props) {
         <Text style={styles.subTitle}>Enter the code</Text>
 
         <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
-          <Text style={{ color: '#666666', fontSize: 20 }}>Enter the 6-digit code sent to</Text>
-          <Text style={{ color: '#000000', fontWeight: '700', marginTop: 5, fontSize: 16 }}>meuemail@gmail.com</Text>
+          <Text style={{
+            fontSize: 20,
+            color: '#666666',
+          }}>Enter the 6-digit code sent to</Text>
+
+          <Text style={{
+            fontSize: 16,
+            marginTop: 5,
+            color: '#000000',
+            fontWeight: '700',
+          }}>meuemail@gmail.com</Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -119,6 +168,7 @@ export default function AlphaForgotPassword(props) {
             placeholder=""
             value={firstDigit}
             autoCorrect={false}
+            keyboardType='numeric'
             ref={firstDigitRef}
             style={styles.input}
             autoCapitalize="none"
@@ -191,9 +241,27 @@ export default function AlphaForgotPassword(props) {
           Didn't receive the code?
         </Text>
 
-        <Text style={{ fontWeight: '700', color: '#4D4D4D', textAlign: 'center', fontSize: 16 }}>
-          Resend in {minutes}:{seconds < 10 ? "0" + seconds : seconds}
-        </Text>
+        <TouchableOpacity
+          style={{
+          }}
+          onPress={() => { handleChangeIsReSend() }}
+        >
+          <Text style={{
+            fontSize: 16,
+            color: '#493d8a',
+            fontWeight: '700',
+            textAlign: 'center',
+          }}>
+            {
+              isReSend ? (
+                'Resend now'
+              ) : (
+                `Resend in ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
+              )
+            }
+          </Text>
+
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 2, width: '100%' }}>
@@ -205,7 +273,10 @@ export default function AlphaForgotPassword(props) {
             fifthDigit.length > 0 &&
             sixthDigit.length > 0
             ? (
-              <TouchableOpacity style={styles.buttonActive} onPress={() => { }}>
+              <TouchableOpacity
+                style={styles.buttonActive}
+                onPress={() => { handleToBetaForgorPassword() }}
+              >
                 <Text style={styles.buttonTextActive}>Continue</Text>
               </TouchableOpacity>
             ) : (
