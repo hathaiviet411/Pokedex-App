@@ -9,7 +9,6 @@ import {
   Text,
   Image,
   Platform,
-  Animated,
   TextInput,
   StyleSheet,
   ScrollView,
@@ -20,8 +19,6 @@ import {
 export default function Dashboard() {
   const [keyword, setKeyword] = useState('');
   const [pokeList, setPokeList] = useState(pokemonList);
-
-  const [animationValue, setAnimationValue] = useState(new Animated.Value(0));
 
   const handleKeyworkChange = (value) => {
     setKeyword(value);
@@ -38,13 +35,6 @@ export default function Dashboard() {
 
       return pokemon;
     });
-
-    Animated.sequence([
-      Animated.timing(animationValue, { toValue: 10, duration: 100, useNativeDriver: true }),
-      Animated.timing(animationValue, { toValue: -10, duration: 100, useNativeDriver: true }),
-      Animated.timing(animationValue, { toValue: 10, duration: 100, useNativeDriver: true }),
-      Animated.timing(animationValue, { toValue: 0, duration: 100, useNativeDriver: true })
-    ]).start();
 
     setPokeList(newPokemonList);
   };
@@ -119,20 +109,27 @@ export default function Dashboard() {
                       <Text style={styles.elementButtonText}>{pokemon.element}</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.typeButton, { backgroundColor: pokemon.typeColor }]}
-                    >
-                      <Image
-                        style={{
-                          left: 5,
-                          width: 30,
-                          height: 30,
-                          position: 'absolute',
-                        }}
-                        source={{ uri: pokemon.typeImage }}
-                      />
-                      <Text style={styles.typeButtonText}>{pokemon.type}</Text>
-                    </TouchableOpacity>
+                    {
+                      pokemon.type ? (
+                        <TouchableOpacity
+                          style={[styles.typeButton, { backgroundColor: pokemon.typeColor }]}
+                        >
+                          <Image
+                            style={{
+                              left: 5,
+                              width: 30,
+                              height: 30,
+                              position: 'absolute',
+                            }}
+                            source={{ uri: pokemon.typeImage }}
+                          />
+                          <Text style={styles.typeButtonText}>{pokemon.type}</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <View style={styles.typeButton} />
+                      )
+                    }
+
                   </View>
                 </View>
 
@@ -152,16 +149,16 @@ export default function Dashboard() {
                     style={{
                       width: 120,
                       height: 120,
+                      resizeMode: 'contain'
                     }}
                     source={{ uri: pokemon.elementBackground }}
                   />
 
-                  <Animated.Image
+                  <Image
                     style={{
                       width: 150,
                       height: 150,
                       position: 'absolute',
-                      transform: [{ translateX: animationValue }]
                     }}
                     source={{ uri: pokemon.avatar }}
                   />
@@ -233,6 +230,7 @@ const styles = StyleSheet.create({
 
   pokeList: {
     marginTop: 20,
+    paddingBottom: 170,
   },
 
   pokeItem: {
