@@ -20,7 +20,7 @@ export default function Loading({ navigation, route }) {
         setTimeout(() => {
           navigation.navigate(route.params.nextScreen);
         }, 3000)
-      }, 8000)
+      }, 5000)
     }
   }, [isFocused]);
 
