@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import pokemonList from './pokemon-list';
 
 import { useState } from 'react';
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -7,6 +9,7 @@ import {
   Text,
   Image,
   Platform,
+  Animated,
   TextInput,
   StyleSheet,
   ScrollView,
@@ -16,10 +19,39 @@ import {
 
 export default function Dashboard() {
   const [keyword, setKeyword] = useState('');
+  const [pokeList, setPokeList] = useState(pokemonList);
+
+  const [animationValue, setAnimationValue] = useState(new Animated.Value(0));
 
   const handleKeyworkChange = (value) => {
     setKeyword(value);
   };
+
+  const handleClickFavoriteButton = (id) => {
+    const newPokemonList = pokeList.map((pokemon) => {
+      if (pokemon.id === id) {
+        return {
+          ...pokemon,
+          favorite: !pokemon.favorite,
+        };
+      }
+
+      return pokemon;
+    });
+
+    Animated.sequence([
+      Animated.timing(animationValue, { toValue: 10, duration: 100, useNativeDriver: true }),
+      Animated.timing(animationValue, { toValue: -10, duration: 100, useNativeDriver: true }),
+      Animated.timing(animationValue, { toValue: 10, duration: 100, useNativeDriver: true }),
+      Animated.timing(animationValue, { toValue: 0, duration: 100, useNativeDriver: true })
+    ]).start();
+
+    setPokeList(newPokemonList);
+  };
+
+  useEffect(() => {
+    setPokeList(pokemonList);
+  }, [])
 
   return (
     <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 50 : 40 }]}>
@@ -63,35 +95,80 @@ export default function Dashboard() {
 
       <View style={styles.pokeList}>
         <ScrollView>
-          <View style={styles.pokeItem}>
-            <View style={styles.pokeItemLeft}>
-              <Text style={styles.coordinateText}>Nº001</Text>
+          {
+            pokeList.map((pokemon, index) => (
+              <TouchableOpacity style={[styles.pokeItem, { backgroundColor: pokemon.cardColor }]} key={index}>
+                <View style={styles.pokeItemLeft}>
+                  <Text style={styles.coordinateText}>{pokemon.coordinate}</Text>
 
-              <Text style={styles.pokeName}>Bulbasaur</Text>
+                  <Text style={styles.pokeName}>{pokemon.name}</Text>
 
-              <View style={{ flexDirection: 'row', gap: 10 }}>
-                <TouchableOpacity
-                  style={styles.elementButton}
-                >
-                  <Image source={{ uri: '' }} />
-                  <Text style={styles.elementButtonText}>Grass</Text>
-                </TouchableOpacity>
+                  <View style={{ flexDirection: 'row', gap: 5 }}>
+                    <TouchableOpacity
+                      style={[styles.elementButton, { backgroundColor: pokemon.elementColor }]}
+                    >
+                      <Image
+                        style={{
+                          left: 5,
+                          width: 30,
+                          height: 30,
+                          position: 'absolute',
+                        }}
+                        source={{ uri: pokemon.elementImage }}
+                      />
+                      <Text style={styles.elementButtonText}>{pokemon.element}</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.typeButton}
-                >
-                  <Text style={styles.typeButtonText}>Venomous</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+                    <TouchableOpacity
+                      style={[styles.typeButton, { backgroundColor: pokemon.typeColor }]}
+                    >
+                      <Image
+                        style={{
+                          left: 5,
+                          width: 30,
+                          height: 30,
+                          position: 'absolute',
+                        }}
+                        source={{ uri: pokemon.typeImage }}
+                      />
+                      <Text style={styles.typeButtonText}>{pokemon.type}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-            <View style={styles.pokeItemRight}>
-              {/* <Image
-                source={require('../../assets/images/pokemon/bulbasaur.png')}
-                style={styles.pokeImage}
-              /> */}
-            </View>
-          </View>
+                <View style={[styles.pokeItemRight, { backgroundColor: pokemon.avatarHolderColor }]}>
+                  <TouchableOpacity
+                    style={[styles.favoriteButton, { zIndex: pokemon.favorite ? 2 : 1 }]}
+                    onPress={() => handleClickFavoriteButton(pokemon.id)}
+                  >
+                    <AntDesign
+                      name={pokemon.favorite ? 'heart' : 'hearto'}
+                      size={24}
+                      color={pokemon.favorite ? '#FD525C' : '#FFFFFF'}
+                    />
+                  </TouchableOpacity>
+
+                  <Image
+                    style={{
+                      width: 120,
+                      height: 120,
+                    }}
+                    source={{ uri: pokemon.elementBackground }}
+                  />
+
+                  <Animated.Image
+                    style={{
+                      width: 150,
+                      height: 150,
+                      position: 'absolute',
+                      transform: [{ translateX: animationValue }]
+                    }}
+                    source={{ uri: pokemon.avatar }}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))
+          }
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -159,15 +236,21 @@ const styles = StyleSheet.create({
   },
 
   pokeItem: {
-    height: 130,
-    backgroundColor: '#EDF6EC',
-    marginHorizontal: 10,
+    gap: 10,
+    margin: 10,
+    height: 150,
+    elevation: 5,
     borderRadius: 15,
+    shadowRadius: 3.84,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    flexDirection: 'row',
+    shadowOffset: { width: 0, height: 2, },
   },
 
   pokeItemLeft: {
     paddingTop: 20,
-    paddingLeft: 25,
+    paddingLeft: 15,
   },
 
   coordinateText: {
@@ -182,39 +265,59 @@ const styles = StyleSheet.create({
   },
 
   elementButton: {
-    marginTop: 10,
-    backgroundColor: '#63BC5A',
+    width: 115,
+    height: 40,
+    paddingLeft: 10,
+    borderRadius: 50,
+    marginVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   elementButtonText: {
-    fontSize: 16,
+    fontSize: 13,
+    marginLeft: 30,
     fontWeight: '700',
+    color: '#F5F5F7'
   },
 
   typeButton: {
-    marginTop: 10,
-    backgroundColor: '#B567CE',
+    width: 115,
+    height: 40,
+    paddingLeft: 10,
+    borderRadius: 50,
+    marginVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   typeButtonText: {
-    fontSize: 16,
+    fontSize: 13,
+    marginLeft: 30,
     fontWeight: '700',
+    color: '#F5F5F7'
   },
 
   pokeItemRight: {
-
-  },
-
-  avatar: {
-
-  },
-
-  background: {
-
+    width: 150,
+    height: '100%',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   favoriteButton: {
-
+    top: 5,
+    right: 5,
+    width: 50,
+    height: 50,
+    borderWidth: 2,
+    borderRadius: 50,
+    borderColor: '#FFF',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
 });
 
