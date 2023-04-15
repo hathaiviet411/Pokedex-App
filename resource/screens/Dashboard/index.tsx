@@ -147,8 +147,8 @@ export default function Dashboard() {
 
                   <Image
                     style={{
-                      width: 120,
-                      height: 120,
+                      width: 140,
+                      height: 140,
                       resizeMode: 'contain'
                     }}
                     source={{ uri: pokemon.elementBackground }}
