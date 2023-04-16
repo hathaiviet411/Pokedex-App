@@ -1,6 +1,6 @@
 import React from "react";
 import slides from "./slides";
-import Paginatior from './paginatior';
+import Pagination from './pagination';
 import OnboardingItem from './onboardingItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -62,7 +62,7 @@ export default function OnboardingMain(props) {
       </View>
 
       <View style={{ flex: 1, position: 'absolute', bottom: 0 }}>
-        <Paginatior data={slides} scrollX={scrollX} />
+        <Pagination data={slides} scrollX={scrollX} />
       </View>
     </SafeAreaView >
   )

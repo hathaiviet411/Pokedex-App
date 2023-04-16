@@ -17,7 +17,7 @@ import SuccessForgotPassword from './resource/screens/ForgotPassword/success';
 import SuccessRegister from './resource/screens/Register/success';
 import OnboardingMain from './resource/screens/Onboarding/onboardingMain';
 import OnboardingIndex from './resource/screens/Onboarding/onboardingIndex';
-import Dashboard from './resource/screens/Dashboard/index';
+import Dashboard from './resource/screens/Dashboard';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
