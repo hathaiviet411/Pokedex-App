@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import pokemonList from './pokemon-list';
 
@@ -8,6 +8,7 @@ import {
   View,
   Text,
   Image,
+  Animated,
   Platform,
   TextInput,
   StyleSheet,
@@ -19,6 +20,10 @@ import {
 export default function Dashboard() {
   const [keyword, setKeyword] = useState('');
   const [pokeList, setPokeList] = useState(pokemonList);
+  const [isShowHeader, setIsShowHeader] = useState(true);
+
+  const translateY = useRef(new Animated.Value(0)).current;
+  let scrollY = 0;
 
   const handleKeyworkChange = (value) => {
     setKeyword(value);
@@ -37,6 +42,35 @@ export default function Dashboard() {
     });
 
     setPokeList(newPokemonList);
+  };
+
+  const handleScroll = (event) => {
+    const newScrollY = event.nativeEvent.contentOffset.y;
+    const deltaY = newScrollY - scrollY;
+    scrollY = newScrollY;
+
+    if (scrollY <= 0) {
+      setIsShowHeader(true);
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else if (deltaY > 0) {
+      setIsShowHeader(false);
+      Animated.timing(translateY, {
+        toValue: -10000,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      setIsShowHeader(true);
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
   };
 
   useEffect(() => {
@@ -58,15 +92,17 @@ export default function Dashboard() {
         />
       </View>
 
-      <View style={{
+      <Animated.View style={{
         gap: 30,
-        marginTop: 30,
-        paddingTop: 20,
+        marginTop: isShowHeader ? 30 : 0,
+        paddingTop: isShowHeader ? 20 : 0,
         borderTopWidth: 2,
         flexDirection: 'row',
         alignItems: 'center',
+        height: isShowHeader ? 60 : 0,
         borderColor: '#F2F2F2',
         justifyContent: 'center',
+        transform: [{ translateY }]
       }}>
         <TouchableOpacity
           style={styles.kindSortButton}
@@ -81,10 +117,10 @@ export default function Dashboard() {
           <Text style={styles.numberSortButtonText}>Ascending</Text>
           <Entypo name="chevron-down" size={22} color="#FFF" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
       <View style={styles.pokeList}>
-        <ScrollView>
+        <ScrollView onScroll={handleScroll}>
           {
             pokeList.map((pokemon, index) => (
               <TouchableOpacity style={[styles.pokeItem, { backgroundColor: pokemon.cardColor }]} key={index}>
@@ -156,8 +192,8 @@ export default function Dashboard() {
 
                   <Image
                     style={{
-                      width: 150,
-                      height: 150,
+                      width: [17, 19].includes(pokemon.id) ? 120 : 150,
+                      height: [17, 19].includes(pokemon.id) ? 120 : 150,
                       position: 'absolute',
                     }}
                     source={{ uri: pokemon.avatar }}
@@ -230,7 +266,7 @@ const styles = StyleSheet.create({
 
   pokeList: {
     marginTop: 20,
-    paddingBottom: 170,
+    paddingBottom: 100,
   },
 
   pokeItem: {
