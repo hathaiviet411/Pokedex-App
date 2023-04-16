@@ -1,13 +1,15 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 import { Pokedex, Region, Favorite, Account } from '../../components';
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs() {
+  const scaleValue = useRef(new Animated.Value(1)).current;
+
   function MyTabBar({ state, descriptors, navigation }) {
     return (
       <View style={style.tabBar}>
@@ -33,6 +35,8 @@ export default function Tabs() {
               // The `merge: true` option makes sure that the params inside the tab screen are preserved
               navigation.navigate({ name: route.name, merge: true });
             }
+
+            startAnimation();
           };
 
           const onLongPress = () => {
@@ -40,6 +44,22 @@ export default function Tabs() {
               type: 'tabLongPress',
               target: route.key,
             });
+          };
+
+          const startAnimation = () => {
+            Animated.sequence([
+              Animated.timing(scaleValue, {
+                toValue: 1.2,
+                duration: 150,
+                useNativeDriver: true,
+              }),
+              Animated.spring(scaleValue, {
+                toValue: 1,
+                friction: 3,
+                tension: 40,
+                useNativeDriver: true,
+              }),
+            ]).start();
           };
 
           return (
@@ -53,17 +73,33 @@ export default function Tabs() {
               accessibilityLabel={options.tabBarAccessibilityLabel}
               accessibilityState={isFocused ? { selected: true } : {}}
             >
-              <Text style={{
-                fontSize: 16,
-                fontWeight: '700',
-                color: isFocused ? '#173EA5' : '#222',
-              }}>
-                {label}
-              </Text>
 
               {
                 index === 0 ? (
-                  <MaterialCommunityIcons name="pokeball" size={24} color={isFocused ? '#173EA5' : '#222'} />
+                  <Animated.View style={isFocused ? {
+                    transform: [{ scale: scaleValue }],
+                    top: -30,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 50,
+                    alignItems: 'center',
+                    position: 'absolute',
+                    backgroundColor: '#FFF',
+                  } : {}}>
+                    <Image
+                      style={{
+                        width: 40,
+                        height: 40,
+                        marginTop: 5,
+                        resizeMode: 'contain',
+                      }}
+                      source={
+                        isFocused ?
+                          require('../../../public/images/poke-active.png') :
+                          require('../../../public/images/poke-inactive.png')
+                      }
+                    />
+                  </Animated.View>
                 ) : (
                   <View />
                 )
@@ -71,32 +107,128 @@ export default function Tabs() {
 
               {
                 index === 1 ? (
-                  <FontAwesome5 name="map-marker-alt" size={24} color="black" />
+                  <Animated.View style={isFocused ? {
+                    transform: [{ scale: scaleValue }],
+                    top: -30,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 50,
+                    alignItems: 'center',
+                    position: 'absolute',
+                    backgroundColor: '#FFF',
+                  } : {}}>
+                    <Image
+                      style={{
+                        width: 40,
+                        height: 40,
+                        marginTop: 5,
+                        resizeMode: 'contain',
+                      }}
+                      source={
+                        isFocused ?
+                          require('../../../public/images/region-active.png') :
+                          require('../../../public/images/region-inactive.png')
+                      }
+                    />
+                  </Animated.View>
                 ) : (
                   <View />
                 )
               }
 
-            </TouchableOpacity>
+              {
+                index === 2 ? (
+
+                  <Animated.View style={isFocused ? {
+                    transform: [{ scale: scaleValue }],
+                    top: -30,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 50,
+                    alignItems: 'center',
+                    position: 'absolute',
+                    backgroundColor: '#FFF',
+                  } : {}}>
+                    <Image
+                      style={{
+                        width: 40,
+                        height: 40,
+                        marginTop: 5,
+                        resizeMode: 'contain',
+                      }}
+                      source={
+                        isFocused ?
+                          require('../../../public/images/fav-active.png') :
+                          require('../../../public/images/fav-inactive.png')
+                      }
+                    />
+                  </Animated.View>
+                ) : (
+                  <View />
+                )
+              }
+
+              {
+                index === 3 ? (
+
+                  <Animated.View style={isFocused ? {
+                    transform: [{ scale: scaleValue }],
+                    top: -30,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 50,
+                    alignItems: 'center',
+                    position: 'absolute',
+                    backgroundColor: '#FFF',
+                  } : {}}>
+                    <Image
+                      style={{
+                        width: 40,
+                        height: 40,
+                        marginTop: 5,
+                        resizeMode: 'contain',
+                      }}
+                      source={
+                        isFocused ?
+                          require('../../../public/images/acc-active.png') :
+                          require('../../../public/images/acc-inactive.png')
+                      }
+                    />
+                  </Animated.View>
+                ) : (
+                  <View />
+                )
+              }
+
+              <Text style={{
+                fontSize: 16,
+                fontWeight: '700',
+                color: isFocused ? '#173EA5' : '#222',
+              }}>
+                {
+                  isFocused ? label : ''
+                }
+              </Text>
+            </TouchableOpacity >
           );
         })}
-      </View>
+      </View >
     );
   }
 
   return (
-    <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+    <Tab.Navigator tabBar={props => <MyTabBar {...props} />} initialRouteName='Pokedex'>
       <Tab.Screen
-        name="Pokedéx"
+        name="Pokedex"
         component={Pokedex}
         options={{
-          tabBarLabel: 'Pokedex',
+          tabBarLabel: 'Pokedéx',
           headerShown: false,
         }}
       />
 
       <Tab.Screen
-        name="Region"
+        name="Regions"
         component={Region}
         options={{
           headerStyle: {
@@ -105,6 +237,7 @@ export default function Tabs() {
             borderBottomColor: '#DDDDDD',
           },
           headerTitleStyle: {
+            fontSize: 24,
             color: '#212121',
             fontWeight: '700',
           }
@@ -121,6 +254,7 @@ export default function Tabs() {
             borderBottomColor: '#DDDDDD',
           },
           headerTitleStyle: {
+            fontSize: 24,
             color: '#212121',
             fontWeight: '700',
           }
@@ -137,6 +271,7 @@ export default function Tabs() {
             borderBottomColor: '#DDDDDD',
           },
           headerTitleStyle: {
+            fontSize: 24,
             color: '#212121',
             fontWeight: '700',
           }
@@ -148,16 +283,18 @@ export default function Tabs() {
 
 const style = StyleSheet.create({
   tabBar: {
-    height: 70,
+    gap: 65,
+    height: 60,
+    borderTopWidth: 1,
     flexDirection: 'row',
-    paddingTop: 20,
     paddingHorizontal: 20,
     backgroundColor: '#FFF',
+    justifyContent: 'center',
     borderTopColor: '#DDDDDD',
-    borderTopWidth: 1,
   },
 
   tabBarItem: {
-
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
