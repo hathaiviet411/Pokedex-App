@@ -20,7 +20,7 @@ export default function Register(props) {
 
       <View style={{ flex: 9, width: '100%' }}>
         <Image
-          style={{ height: 300, resizeMode: 'contain' }}
+          style={{ height: 200, resizeMode: 'contain' }}
           source={{ uri: 'https://raw.githubusercontent.com/nonamelittlefox/Pokedex-App/develop/public/images/register.png' }}
         />
 

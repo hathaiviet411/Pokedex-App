@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 import pokemonList from './pokemon-list';
+import FastImage from 'react-native-fast-image'
 
 import { useState } from 'react';
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -20,17 +21,13 @@ import {
 export default function Dashboard() {
   const [keyword, setKeyword] = useState('');
   const [pokeList, setPokeList] = useState(pokemonList);
-  const [isShowHeader, setIsShowHeader] = useState(true);
-
-  const translateY = useRef(new Animated.Value(0)).current;
-  let scrollY = 0;
 
   const handleKeyworkChange = (value) => {
     setKeyword(value);
   };
 
   const handleClickFavoriteButton = (id) => {
-    const newPokemonList = pokeList.map((pokemon) => {
+    const newPokeList = pokeList.map((pokemon) => {
       if (pokemon.id === id) {
         return {
           ...pokemon,
@@ -41,36 +38,7 @@ export default function Dashboard() {
       return pokemon;
     });
 
-    setPokeList(newPokemonList);
-  };
-
-  const handleScroll = (event) => {
-    const newScrollY = event.nativeEvent.contentOffset.y;
-    const deltaY = newScrollY - scrollY;
-    scrollY = newScrollY;
-
-    if (scrollY <= 0) {
-      setIsShowHeader(true);
-      Animated.timing(translateY, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else if (deltaY > 0) {
-      setIsShowHeader(false);
-      Animated.timing(translateY, {
-        toValue: -10000,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      setIsShowHeader(true);
-      Animated.timing(translateY, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
+    setPokeList(newPokeList);
   };
 
   useEffect(() => {
@@ -80,7 +48,7 @@ export default function Dashboard() {
   return (
     <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 50 : 40 }]}>
       <View style={styles.searchBar}>
-        <AntDesign name="search1" size={32} color="#666666" />
+        <AntDesign name="search1" size={22} color="#666666" />
         <TextInput
           value={keyword}
           autoCorrect={false}
@@ -94,15 +62,14 @@ export default function Dashboard() {
 
       <Animated.View style={{
         gap: 30,
-        marginTop: isShowHeader ? 30 : 0,
-        paddingTop: isShowHeader ? 20 : 0,
-        borderTopWidth: 2,
+        height: 60,
+        marginTop: 10,
+        paddingTop: 10,
+        borderTopWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        height: isShowHeader ? 60 : 0,
         borderColor: '#F2F2F2',
         justifyContent: 'center',
-        transform: [{ translateY }]
       }}>
         <TouchableOpacity
           style={styles.kindSortButton}
@@ -120,7 +87,7 @@ export default function Dashboard() {
       </Animated.View>
 
       <View style={styles.pokeList}>
-        <ScrollView onScroll={handleScroll}>
+        <ScrollView scrollEventThrottle={64} removeClippedSubviews shouldRasterizeIOS>
           {
             pokeList.map((pokemon, index) => (
               <TouchableOpacity style={[styles.pokeItem, { backgroundColor: pokemon.cardColor }]} key={index}>
@@ -133,14 +100,14 @@ export default function Dashboard() {
                     <TouchableOpacity
                       style={[styles.elementButton, { backgroundColor: pokemon.elementColor }]}
                     >
-                      <Image
+                      <FastImage
                         style={{
                           left: 5,
-                          width: 30,
-                          height: 30,
+                          width: 20,
+                          height: 20,
                           position: 'absolute',
                         }}
-                        source={{ uri: pokemon.elementImage }}
+                        source={{ uri: pokemon.elementImage, priority: FastImage.priority.high }}
                       />
                       <Text style={styles.elementButtonText}>{pokemon.element}</Text>
                     </TouchableOpacity>
@@ -153,8 +120,8 @@ export default function Dashboard() {
                           <Image
                             style={{
                               left: 5,
-                              width: 30,
-                              height: 30,
+                              width: 20,
+                              height: 20,
                               position: 'absolute',
                             }}
                             source={{ uri: pokemon.typeImage }}
@@ -176,7 +143,7 @@ export default function Dashboard() {
                   >
                     <AntDesign
                       name={pokemon.favorite ? 'heart' : 'hearto'}
-                      size={24}
+                      size={16}
                       color={pokemon.favorite ? '#FD525C' : '#FFFFFF'}
                     />
                   </TouchableOpacity>
@@ -215,8 +182,8 @@ const styles = StyleSheet.create({
   },
 
   searchBar: {
-    height: 65,
-    borderWidth: 2,
+    height: 50,
+    borderWidth: 1,
     paddingLeft: 30,
     borderRadius: 45,
     alignItems: 'center',
@@ -233,8 +200,8 @@ const styles = StyleSheet.create({
   },
 
   kindSortButton: {
-    height: 55,
-    width: 180,
+    height: 45,
+    width: 160,
     borderRadius: 49,
     flexDirection: 'row',
     alignItems: 'center',
@@ -244,13 +211,13 @@ const styles = StyleSheet.create({
 
   kindSortButtonText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700'
   },
 
   numberSortButton: {
-    height: 55,
-    width: 180,
+    height: 45,
+    width: 160,
     borderRadius: 49,
     flexDirection: 'row',
     alignItems: 'center',
@@ -260,13 +227,13 @@ const styles = StyleSheet.create({
 
   numberSortButtonText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
   },
 
   pokeList: {
-    marginTop: 20,
-    paddingBottom: 100,
+    marginTop: 10,
+    paddingBottom: 120,
   },
 
   pokeItem: {
@@ -283,24 +250,23 @@ const styles = StyleSheet.create({
   },
 
   pokeItemLeft: {
-    paddingTop: 20,
+    paddingTop: 15,
     paddingLeft: 15,
   },
 
   coordinateText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
   },
 
   pokeName: {
-    fontSize: 26,
-    marginTop: 5,
+    fontSize: 20,
     fontWeight: '700',
   },
 
   elementButton: {
-    width: 115,
-    height: 40,
+    width: 95,
+    height: 35,
     paddingLeft: 10,
     borderRadius: 50,
     marginVertical: 10,
@@ -309,15 +275,15 @@ const styles = StyleSheet.create({
   },
 
   elementButtonText: {
-    fontSize: 13,
-    marginLeft: 30,
+    fontSize: 12,
+    marginLeft: 20,
     fontWeight: '700',
     color: '#F5F5F7'
   },
 
   typeButton: {
-    width: 115,
-    height: 40,
+    width: 95,
+    height: 35,
     paddingLeft: 10,
     borderRadius: 50,
     marginVertical: 10,
@@ -326,15 +292,14 @@ const styles = StyleSheet.create({
   },
 
   typeButtonText: {
-    fontSize: 13,
-    marginLeft: 30,
+    fontSize: 12,
+    marginLeft: 20,
     fontWeight: '700',
     color: '#F5F5F7'
   },
 
   pokeItemRight: {
-    width: 150,
-    height: '100%',
+    flex: 1,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
@@ -343,8 +308,8 @@ const styles = StyleSheet.create({
   favoriteButton: {
     top: 5,
     right: 5,
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
     borderWidth: 2,
     borderRadius: 50,
     borderColor: '#FFF',

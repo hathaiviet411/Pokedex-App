@@ -17,8 +17,8 @@ export default function SuccessRegister(props) {
     setIsShowSuccessAni(false);
   };
 
-  const navigateToAlphaRegister = () => {
-    props.navigation.navigate('AlphaRegister')
+  const navigateToLogin = () => {
+    props.navigation.navigate('AlphaLogin')
   };
 
   return (
@@ -41,7 +41,7 @@ export default function SuccessRegister(props) {
         }
 
         <Image
-          style={{ height: 300, resizeMode: 'contain' }}
+          style={{ height: 200, resizeMode: 'contain' }}
           source={{ uri: 'https://raw.githubusercontent.com/nonamelittlefox/Pokedex-App/develop/public/images/register-success.png' }}
         />
 
@@ -49,7 +49,7 @@ export default function SuccessRegister(props) {
 
         <Text style={styles.content}>Welcome, coach! We are excited to follow your journey.</Text>
 
-        <TouchableOpacity style={[styles.buttonEmail, { marginTop: 50 }]} onPress={() => { navigateToAlphaRegister() }}>
+        <TouchableOpacity style={[styles.buttonEmail, { marginTop: 50 }]} onPress={() => { navigateToLogin() }}>
           <Text style={styles.buttonEmailText}>Continue</Text>
         </TouchableOpacity>
       </View>

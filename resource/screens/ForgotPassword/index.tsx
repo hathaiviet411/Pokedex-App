@@ -13,7 +13,6 @@ export default function ForgotPassword(props) {
   const [email, setEmail] = useState('');
 
   const handleEmailChange = (value) => {
-    console.log(email);
     setEmail(value);
   };
 

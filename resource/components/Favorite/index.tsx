@@ -1,16 +1,17 @@
 import React from 'react';
+import LottieView from 'lottie-react-native';
 
 import { StyleSheet, Text, View, Image } from 'react-native';
 
 export default function Favorite() {
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: 'https://github.com/nonamelittlefox/Pokedex-App/blob/develop/public/images/favorite/silly-first.png?raw=true' }}
+      <LottieView
+        source={require('../../../public/lottifiles-json/empty.json')}
+        autoPlay
+        loop
         style={{
-          width: 300,
-          height: 300,
-          resizeMode: 'contain'
+          width: 400,
         }}
       />
 
@@ -32,13 +33,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',
   },
 
   content: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
   },
 });

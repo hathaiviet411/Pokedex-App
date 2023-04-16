@@ -78,19 +78,19 @@ export default function Tabs() {
                 index === 0 ? (
                   <Animated.View style={isFocused ? {
                     transform: [{ scale: scaleValue }],
-                    top: -30,
-                    width: 60,
-                    height: 60,
+                    top: -15,
+                    width: 40,
+                    height: 40,
                     borderRadius: 50,
                     alignItems: 'center',
                     position: 'absolute',
                     backgroundColor: '#FFF',
+                    justifyContent: 'center',
                   } : {}}>
                     <Image
                       style={{
-                        width: 40,
-                        height: 40,
-                        marginTop: 5,
+                        width: 30,
+                        height: 30,
                         resizeMode: 'contain',
                       }}
                       source={
@@ -109,19 +109,19 @@ export default function Tabs() {
                 index === 1 ? (
                   <Animated.View style={isFocused ? {
                     transform: [{ scale: scaleValue }],
-                    top: -30,
-                    width: 60,
-                    height: 60,
+                    top: -15,
+                    width: 40,
+                    height: 40,
                     borderRadius: 50,
                     alignItems: 'center',
                     position: 'absolute',
                     backgroundColor: '#FFF',
+                    justifyContent: 'center',
                   } : {}}>
                     <Image
                       style={{
-                        width: 40,
-                        height: 40,
-                        marginTop: 5,
+                        width: 30,
+                        height: 30,
                         resizeMode: 'contain',
                       }}
                       source={
@@ -141,19 +141,19 @@ export default function Tabs() {
 
                   <Animated.View style={isFocused ? {
                     transform: [{ scale: scaleValue }],
-                    top: -30,
-                    width: 60,
-                    height: 60,
+                    top: -15,
+                    width: 40,
+                    height: 40,
                     borderRadius: 50,
                     alignItems: 'center',
                     position: 'absolute',
                     backgroundColor: '#FFF',
+                    justifyContent: 'center',
                   } : {}}>
                     <Image
                       style={{
-                        width: 40,
-                        height: 40,
-                        marginTop: 5,
+                        width: 30,
+                        height: 30,
                         resizeMode: 'contain',
                       }}
                       source={
@@ -173,19 +173,19 @@ export default function Tabs() {
 
                   <Animated.View style={isFocused ? {
                     transform: [{ scale: scaleValue }],
-                    top: -30,
-                    width: 60,
-                    height: 60,
+                    top: -15,
+                    width: 40,
+                    height: 40,
                     borderRadius: 50,
                     alignItems: 'center',
                     position: 'absolute',
                     backgroundColor: '#FFF',
+                    justifyContent: 'center',
                   } : {}}>
                     <Image
                       style={{
-                        width: 40,
-                        height: 40,
-                        marginTop: 5,
+                        width: 30,
+                        height: 30,
                         resizeMode: 'contain',
                       }}
                       source={
@@ -201,7 +201,7 @@ export default function Tabs() {
               }
 
               <Text style={{
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: '700',
                 color: isFocused ? '#173EA5' : '#222',
               }}>
@@ -237,7 +237,7 @@ export default function Tabs() {
             borderBottomColor: '#DDDDDD',
           },
           headerTitleStyle: {
-            fontSize: 24,
+            fontSize: 18,
             color: '#212121',
             fontWeight: '700',
           }
@@ -254,7 +254,7 @@ export default function Tabs() {
             borderBottomColor: '#DDDDDD',
           },
           headerTitleStyle: {
-            fontSize: 24,
+            fontSize: 18,
             color: '#212121',
             fontWeight: '700',
           }
@@ -271,7 +271,7 @@ export default function Tabs() {
             borderBottomColor: '#DDDDDD',
           },
           headerTitleStyle: {
-            fontSize: 24,
+            fontSize: 18,
             color: '#212121',
             fontWeight: '700',
           }
@@ -283,14 +283,14 @@ export default function Tabs() {
 
 const style = StyleSheet.create({
   tabBar: {
-    gap: 65,
-    height: 60,
+    gap: 50,
+    height: 70,
     borderTopWidth: 1,
     flexDirection: 'row',
     paddingHorizontal: 20,
     backgroundColor: '#FFF',
     justifyContent: 'center',
-    borderTopColor: '#DDDDDD',
+    borderTopColor: '#eeeeee',
   },
 
   tabBarItem: {

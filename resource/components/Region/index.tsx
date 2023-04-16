@@ -1,27 +1,12 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import regions from './regions';
 
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 
 export default function Region() {
-  const [hasScrollDown, setHasScrollDown] = useState(false);
-
-  const handleScroll = (event) => {
-    const scrollPosition = event.nativeEvent.contentOffset.y;
-
-    console.log(scrollPosition);
-
-    if (scrollPosition > 30) {
-      setHasScrollDown(true);
-    } else {
-      setHasScrollDown(false);
-    }
-  };
-
   return (
-    <View style={[styles.container, { paddingTop: hasScrollDown ? 0 : 20 }]}>
-      <ScrollView onScroll={handleScroll} scrollEventThrottle={5}>
+    <View style={styles.container}>
+      <ScrollView scrollEventThrottle={64}>
         {regions.map((region, index) => (
           <TouchableOpacity key={index} style={{ gap: 20 }}>
             <Image
@@ -51,8 +36,8 @@ export default function Region() {
                       key={pokemonIndex}
                       source={{ uri: pokemon.avatar }}
                       style={{
-                        width: 80,
-                        height: 80,
+                        width: 65,
+                        height: 65,
                         resizeMode: 'cover',
                       }}
                     />
@@ -71,7 +56,7 @@ export default function Region() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 40,
+    paddingTop: 10,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
   },
@@ -111,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   regionItemRight: {
-    paddingTop: 40,
+    paddingTop: 50,
     paddingLeft: 30,
     flexDirection: 'row',
   },

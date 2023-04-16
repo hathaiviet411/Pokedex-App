@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import Lottie from 'lottie-react-native';
 
 import { useEffect } from "react";
@@ -12,8 +13,6 @@ export default function Loading({ navigation, route }) {
 
   useEffect(() => {
     if (isFocused) {
-      console.log(route.params.nextScreen);
-
       setTimeout(() => {
         setIsLoading(false);
 

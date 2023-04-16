@@ -41,7 +41,7 @@ export default function SuccessLogin(props) {
         }
 
         <Image
-          style={{ height: 300, resizeMode: 'contain' }}
+          style={{ height: 200, resizeMode: 'contain' }}
           source={{ uri: 'https://raw.githubusercontent.com/nonamelittlefox/Pokedex-App/master/public/images/loading-success.png' }}
         />
 
