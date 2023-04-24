@@ -14,6 +14,7 @@ export default [
     avatar: 'https://raw.githubusercontent.com/nonamelittlefox/Pokedex-App/master/public/images/bulbasaur.png',
     avatarHolderColor: '#63BC5A',
     favorite: false,
+    gif: require('../../../public/images/info/bulbasaur_gif.gif'),
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ export default [
     avatar: 'https://raw.githubusercontent.com/nonamelittlefox/Pokedex-App/master/public/images/ivysaur.png',
     avatarHolderColor: '#63BC5A',
     favorite: false,
+    gif: require('../../../public/images/info/ivysaur_gif.gif'),
   },
   {
     id: 3,
@@ -46,6 +48,7 @@ export default [
     avatar: 'https://github.com/nonamelittlefox/Pokedex-App/blob/master/public/images/venusaur.png?raw=true',
     avatarHolderColor: '#63BC5A',
     favorite: false,
+    gif: require('../../../public/images/info/venusaur_gif.gif'),
   },
   {
     id: 4,

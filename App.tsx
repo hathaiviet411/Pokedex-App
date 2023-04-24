@@ -17,9 +17,9 @@ import SuccessForgotPassword from './resource/screens/ForgotPassword/success';
 import SuccessRegister from './resource/screens/Register/success';
 import OnboardingMain from './resource/screens/Onboarding/onboardingMain';
 import OnboardingIndex from './resource/screens/Onboarding/onboardingIndex';
+import DetailPokedex from './resource/components/Pokedex/detail';
 
 import { BottomNavigator } from './resource/layout';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, StyleSheet, Platform } from 'react-native';
@@ -74,6 +74,7 @@ const PokedexStack = () => {
       <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPassword} />
       <Stack.Screen name="OnboardingMain" component={OnboardingMain} />
       <Stack.Screen name="OnboardingIndex" component={OnboardingIndex} />
+      <Stack.Screen name="DetailPokedex" component={DetailPokedex} />
       <Stack.Screen name="Dashboard" component={BottomNavigator} />
     </Stack.Navigator>
   );

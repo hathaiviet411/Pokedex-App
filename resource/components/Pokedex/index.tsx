@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 import pokemonList from './pokemon-list';
-import FastImage from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image';
 
 import { useState } from 'react';
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -18,7 +18,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-export default function Dashboard() {
+export interface props {
+  navigation: any;
+}
+
+export default function Dashboard(props) {
   const [keyword, setKeyword] = useState('');
   const [pokeList, setPokeList] = useState(pokemonList);
 
@@ -41,6 +45,10 @@ export default function Dashboard() {
     setPokeList(newPokeList);
   };
 
+  const handleNavigateToDetail = (item) => {
+    props.navigation.navigate('DetailPokedex', { item: item });
+  };
+
   useEffect(() => {
     setPokeList(pokemonList);
   }, [])
@@ -48,13 +56,13 @@ export default function Dashboard() {
   return (
     <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 50 : 40 }]}>
       <View style={styles.searchBar}>
-        <AntDesign name="search1" size={22} color="#666666" />
+        <AntDesign name='search1' size={22} color='#666666' />
         <TextInput
           value={keyword}
           autoCorrect={false}
           style={styles.searchBarInput}
-          autoCapitalize="none"
-          placeholder="Search Pokemon..."
+          autoCapitalize='none'
+          placeholder='Search Pokemon...'
           placeholderTextColor={'#999999'}
           onChangeText={handleKeyworkChange}
         />
@@ -71,18 +79,16 @@ export default function Dashboard() {
         borderColor: '#F2F2F2',
         justifyContent: 'center',
       }}>
-        <TouchableOpacity
-          style={styles.kindSortButton}
-        >
+        <TouchableOpacity style={styles.kindSortButton}>
           <Text style={styles.kindSortButtonText}>All kinds</Text>
-          <Entypo name="chevron-down" size={22} color="#FFF" style={{ marginLeft: 5 }} />
+
+          <Entypo name='chevron-down' size={22} color='#FFF' style={{ marginLeft: 5 }} />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.numberSortButton}
-        >
+        <TouchableOpacity style={styles.numberSortButton}>
           <Text style={styles.numberSortButtonText}>Ascending</Text>
-          <Entypo name="chevron-down" size={22} color="#FFF" style={{ marginLeft: 5 }} />
+
+          <Entypo name='chevron-down' size={22} color='#FFF' style={{ marginLeft: 5 }} />
         </TouchableOpacity>
       </Animated.View>
 
@@ -90,14 +96,18 @@ export default function Dashboard() {
         <ScrollView scrollEventThrottle={64} removeClippedSubviews shouldRasterizeIOS>
           {
             pokeList.map((pokemon, index) => (
-              <TouchableOpacity style={[styles.pokeItem, { backgroundColor: pokemon.cardColor }]} key={index}>
+              <TouchableOpacity
+                key={index}
+                onPress={() => { handleNavigateToDetail(pokemon) }}
+                style={[styles.pokeItem, { backgroundColor: pokemon.cardColor }]}
+              >
                 <View style={styles.pokeItemLeft}>
                   <Text style={styles.coordinateText}>{pokemon.coordinate}</Text>
 
                   <Text style={styles.pokeName}>{pokemon.name}</Text>
 
                   <View style={{ flexDirection: 'row', gap: 5 }}>
-                    <TouchableOpacity
+                    <View
                       style={[styles.elementButton, { backgroundColor: pokemon.elementColor }]}
                     >
                       <FastImage
@@ -110,11 +120,11 @@ export default function Dashboard() {
                         source={{ uri: pokemon.elementImage, priority: FastImage.priority.high }}
                       />
                       <Text style={styles.elementButtonText}>{pokemon.element}</Text>
-                    </TouchableOpacity>
+                    </View>
 
                     {
                       pokemon.type ? (
-                        <TouchableOpacity
+                        <View
                           style={[styles.typeButton, { backgroundColor: pokemon.typeColor }]}
                         >
                           <Image
@@ -127,7 +137,7 @@ export default function Dashboard() {
                             source={{ uri: pokemon.typeImage }}
                           />
                           <Text style={styles.typeButtonText}>{pokemon.type}</Text>
-                        </TouchableOpacity>
+                        </View>
                       ) : (
                         <View style={styles.typeButton} />
                       )
@@ -265,7 +275,7 @@ const styles = StyleSheet.create({
   },
 
   elementButton: {
-    width: 95,
+    width: 105,
     height: 35,
     paddingLeft: 10,
     borderRadius: 50,
@@ -282,7 +292,7 @@ const styles = StyleSheet.create({
   },
 
   typeButton: {
-    width: 95,
+    width: 105,
     height: 35,
     paddingLeft: 10,
     borderRadius: 50,
